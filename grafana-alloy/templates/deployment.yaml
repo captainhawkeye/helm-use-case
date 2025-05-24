@@ -26,6 +26,12 @@ spec:
         - name: {{ $key }}
           value: {{ $value | quote }}
         {{- end }}
+        {{- range $key, $value := .Values.secrets }}
+        - name: {{ $key }}
+          valueFrom:
+            secretKeyRef:
+              key: {{ $key }}
+              name: {{ .Values.name }}
         resources:
           limits:
             cpu: {{ .Values.limits.cpu | quote }}
