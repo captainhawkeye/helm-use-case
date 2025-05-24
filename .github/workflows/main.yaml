@@ -11,6 +11,7 @@ jobs:
   deploy:
     env:
       GCP_PROJECT: damontargaryen-project
+      K8S_ENV: sandbox
       
     runs-on:
       - ubuntu-latest
@@ -42,11 +43,13 @@ jobs:
     - name: Fetch GCP secrets
       env:
         GCP_PROJECT_ID: ${{ env.GCP_PROJECT }}
+        SECRET_SUFFIX: "_${{ env.K8S_ENV }}"
       run: |
         echo "secrets:" > helm-secrets.yaml
         while read -r key; do
           [[ -z "$key" ]] && continue
-          value=$(gcloud secrets versions access latest --secret="$key" --project="$GCP_PROJECT_ID")
+          gcp_secret_name="${key}${SECRET_SUFFIX}"
+          value=$(gcloud secrets versions access latest --secret="$gcp_secret_name" --project="$GCP_PROJECT_ID")
           export $key="$value"
           echo "  $key: \"${!key}\"" >> helm-secrets.yaml
         done < ./grafana-alloy/secrets/dev.yaml
