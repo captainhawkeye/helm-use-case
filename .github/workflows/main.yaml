@@ -55,4 +55,4 @@ jobs:
     - name: Check Helm Template
       run: |
         cd ./grafana-alloy
-        helm template .
+        helm template . -f ./grafana-alloy/values.yaml -f ./helm-secrets.yaml
