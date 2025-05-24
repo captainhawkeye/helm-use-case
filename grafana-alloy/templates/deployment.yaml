@@ -32,6 +32,7 @@ spec:
             secretKeyRef:
               key: {{ $key }}
               name: {{ .Values.name }}
+        {{- end }}
         resources:
           limits:
             cpu: {{ .Values.limits.cpu | quote }}
