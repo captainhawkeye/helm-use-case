@@ -34,7 +34,7 @@ To access Grafana Alloy:
 The deployment is configured with Horizontal Pod Autoscaler:
   - Min replicas: {{ .Values.hpa.minReplicas }}
   - Max replicas: {{ .Values.hpa.maxReplicas }}
-  - Target CPU utilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}%
+  - Target CPU utilization: {{ .Values.hpa.targetCPUUtilizationPercentage }}%
 {{- end }}
 
 For more information on using Grafana Alloy, visit:
