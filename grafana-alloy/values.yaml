@@ -34,10 +34,10 @@ service:
     http: 3000
 
 hpa:
-  enabled: false
+  enabled: true
   minReplicas: 1
   maxReplicas: 5
   targetMemoryUtilizationPercentage: 80
 
 gsmSecrets:
-  enabled: false
+  enabled: true
