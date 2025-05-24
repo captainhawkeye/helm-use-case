@@ -45,7 +45,7 @@ jobs:
         sudo apt-get update && sudo apt-get install -y wget
         wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
         chmod +x /usr/local/bin/yq
-        GSM_SECRET=$(yq '.gsmSecrets.enabled' ./values/${K8S_ENV}.yaml)
+        GSM_SECRET=$(yq '.gsmSecrets.enabled' ./grafana-alloy/values/${K8S_ENV}.yaml)
         echo "GSM_SECRET=$GSM_SECRET" >> $GITHUB_ENV
         echo "GSM Secret setting from values.yaml: $GSM_SECRET"
 
