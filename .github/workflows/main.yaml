@@ -16,16 +16,13 @@ jobs:
       matrix:
         config:
           - environment: dev
-            gsm_secret: true
             gcp_project: damontargaryen-project
           - environment: sandbox
-            gsm_secret: true
             gcp_project: damontargaryen-project
       
     env:
       GCP_PROJECT: ${{ matrix.config.gcp_project }}
       K8S_ENV: ${{ matrix.config.environment }}
-      GSM_SECRET: ${{ matrix.config.gsm_secret }}
       
     runs-on:
       - ubuntu-latest
@@ -42,6 +39,15 @@ jobs:
       uses: Azure/setup-helm@v3
       with:
         version: 'latest'
+
+    - name: Set GSM Secret Flag
+      run: |
+        sudo apt-get update && sudo apt-get install -y wget
+        wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+        chmod +x /usr/local/bin/yq
+        GSM_SECRET=$(yq '.gsmSecrets.enabled' ./values/${K8S_ENV}.yaml)
+        echo "GSM_SECRET=$GSM_SECRET" >> $GITHUB_ENV
+        echo "GSM Secret setting from values.yaml: $GSM_SECRET"
 
     - name: Setup gCloud
       if: ${{ env.GSM_SECRET == 'true' }}
