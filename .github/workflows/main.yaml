@@ -56,7 +56,7 @@ jobs:
           value=$(gcloud secrets versions access latest --secret="$gcp_secret_name" --project="$GCP_PROJECT_ID")
           export $key="$value"
           echo "  $key: \"${!key}\"" >> helm-secrets.yaml
-        done < ./grafana-alloy/secrets/dev.yaml
+        done < ./grafana-alloy/secrets/${K8S_ENV}.yaml
 
     - name: Check Helm Template
       run: |
