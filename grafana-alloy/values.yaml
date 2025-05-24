@@ -38,3 +38,6 @@ hpa:
   minReplicas: 1
   maxReplicas: 5
   targetMemoryUtilizationPercentage: 80
+
+gsmSecrets:
+  enabled: true
