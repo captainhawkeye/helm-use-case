@@ -12,7 +12,7 @@ jobs:
     env:
       GCP_PROJECT: damontargaryen-project
       K8S_ENV: sandbox
-      GSM_SECRET: true
+      GSM_SECRET: 'true'
       
     runs-on:
       - ubuntu-latest
