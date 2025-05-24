@@ -26,12 +26,14 @@ spec:
         - name: {{ $key }}
           value: {{ $value | quote }}
         {{- end }}
+        {{- if .Values.gsmSecrets.enabled }}
         {{- range $key, $value := .Values.secrets }}
         - name: {{ $key }}
           valueFrom:
             secretKeyRef:
               key: {{ $key }}
               name: {{ $.Values.name }}
+        {{- end }}
         {{- end }}
         resources:
           limits:
