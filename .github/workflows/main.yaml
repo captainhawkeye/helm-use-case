@@ -9,16 +9,26 @@ concurrency:
 
 jobs:
   deploy:
+    name: Deploying to ${{ matrix.config.environment }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - environment: dev
+            gsm_secret: true
+            gcp_project: damontargaryen-project
+          - environment: sandbox
+            gsm_secret: true
+            gcp_project: damontargaryen-project
+      
     env:
-      GCP_PROJECT: damontargaryen-project
-      K8S_ENV: sandbox
-      GSM_SECRET: true
+      GCP_PROJECT: ${{ matrix.config.gcp_project }}
+      K8S_ENV: ${{ matrix.config.environment }}
+      GSM_SECRET: ${{ matrix.config.gsm_secret }}
       
     runs-on:
       - ubuntu-latest
-    
-    strategy:
-      fail-fast: true
 
     permissions:
       contents: 'read'
@@ -61,7 +71,7 @@ jobs:
     - name: Check Helm Template
       run: |
         if [ "${{ env.GSM_SECRET }}" = "true" ]; then
-          helm template ./grafana-alloy -f ./grafana-alloy/values.yaml -f ./helm-secrets.yaml
+          helm template ./grafana-alloy -f ./grafana-alloy/values/${K8S_ENV}.yaml -f ./helm-secrets.yaml
         else
-          helm template ./grafana-alloy -f ./grafana-alloy/values.yaml
+          helm template ./grafana-alloy -f ./grafana-alloy/values/${K8S_ENV}.yaml
         fi
