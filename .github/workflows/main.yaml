@@ -39,6 +39,19 @@ jobs:
       with:
         credentials_json: ${{ secrets.GCP_KEY }}
 
+    # - name: Fetch GCP secrets
+    #   env:
+    #     GCP_PROJECT_ID: ${{ env.GCP_PROJECT }}
+    #   run: |
+    #     echo "secrets:" > helm-secrets.yaml
+    #     while read -r key; do
+    #       [[ -z "$key" ]] && continue
+    #       value=$(gcloud secrets versions access latest --secret="$key" --project="$GCP_PROJECT_ID")
+    #       export $key="$value"
+    #       echo "  $key: \"\$(echo -n \"\$$key\")\"" >> helm-secrets.yaml
+    #     done < ./grafana-alloy/secrets/dev.yaml
+    #     cat helm-secrets.yaml
+
     - name: Fetch GCP secrets
       env:
         GCP_PROJECT_ID: ${{ env.GCP_PROJECT }}
@@ -48,7 +61,7 @@ jobs:
           [[ -z "$key" ]] && continue
           value=$(gcloud secrets versions access latest --secret="$key" --project="$GCP_PROJECT_ID")
           export $key="$value"
-          echo "  $key: \"\$(echo -n \"\$$key\")\"" >> helm-secrets.yaml
+          echo "  $key: \"${!key}\"" >> helm-secrets.yaml
         done < ./grafana-alloy/secrets/dev.yaml
         cat helm-secrets.yaml
 
