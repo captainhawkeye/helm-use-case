@@ -1,0 +1,40 @@
+name: grafana-alloy
+namespace: helm-user
+
+replica: 1
+
+image:
+  repository: grafana/alloy
+  tag: latest
+
+ports:
+  containerPort: 3000
+  name: http
+
+env:
+  GF_AUTH_ANONYMOUS_ENABLED: "true"
+  GF_AUTH_ANONYMOUS_ORG_ROLE: "Admin"
+  GF_AUTH_DISABLE_LOGIN_FORM: "true"
+
+limits:
+  cpu: "1"
+  memory: "1Gi"
+requests:
+  cpu: "500m"
+  memory: "512Mi"
+
+volumeName: grafana-storage
+volumeMountPath: /var/lib/grafana
+
+service:
+  type: NodePort
+  nodePort: 30080
+  protocol: TCP
+  ports:
+    http: 3000
+
+hpa:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  targetMemoryUtilizationPercentage: 80

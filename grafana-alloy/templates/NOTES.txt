@@ -1,0 +1,42 @@
+Thank you for installing {{ .Chart.Name }} chart.
+
+Release Name: {{ .Release.Name }}
+Chart Version: {{ .Chart.Version }}
+Namespace: {{ .Values.namespace }}
+
+Your Grafana Alloy has been deployed with:
+  - {{ .Values.replica }} replica(s)
+  - Image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+
+To access Grafana Alloy:
+
+{{- if contains "NodePort" .Values.service.type }}
+  Get the Node IP and NodePort with:
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Values.namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  export NODE_PORT=$(kubectl get --namespace {{ .Values.namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ .Values.name }})
+  echo "Grafana Alloy is available at http://$NODE_IP:$NODE_PORT"
+
+{{- else if contains "LoadBalancer" .Values.service.type }}
+  Get the external IP with:
+  export SERVICE_IP=$(kubectl get svc --namespace {{ .Values.namespace }} {{ .Values.name }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+  echo "Grafana Alloy is available at http://$SERVICE_IP:{{ .Values.ports.containerPort }}"
+
+{{- else if contains "ClusterIP" .Values.service.type }}
+  Grafana Alloy is only accessible within the cluster on:
+  http://{{ .Values.name }}.{{ .Values.namespace }}.svc.cluster.local:{{ .Values.ports.containerPort }}
+
+  To access it from your local machine, run:
+  kubectl port-forward --namespace {{ .Values.namespace }} svc/{{ .Values.name }} {{ .Values.ports.containerPort }}:{{ .Values.ports.containerPort }}
+  echo "Grafana Alloy is available at http://localhost:{{ .Values.ports.containerPort }}"
+{{- end }}
+
+{{- if .Values.hpa.enabled }}
+The deployment is configured with Horizontal Pod Autoscaler:
+  - Min replicas: {{ .Values.autoscaling.minReplicas }}
+  - Max replicas: {{ .Values.autoscaling.maxReplicas }}
+  - Target CPU utilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}%
+  - Target Memory utilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}%
+{{- end }}
+
+For more information on using Grafana Alloy, visit:
+https://grafana.com/docs/
