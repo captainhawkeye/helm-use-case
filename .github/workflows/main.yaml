@@ -26,10 +26,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    # - name: Helm tool installer
-    #   uses: Azure/setup-helm@v3
-    #   with:
-    #     version: 'latest'
+    - name: Helm tool installer
+      uses: Azure/setup-helm@v3
+      with:
+        version: 'latest'
 
     - name: Setup gCloud
       uses: google-github-actions/setup-gcloud@v2.1.3
@@ -52,7 +52,7 @@ jobs:
         done < ./grafana-alloy/secrets/dev.yaml
         cat helm-secrets.yaml
 
-    # - name: Check Helm Template
-    #   run: |
-    #     cd ./grafana-alloy
-    #     helm template .
+    - name: Check Helm Template
+      run: |
+        cd ./grafana-alloy
+        helm template .
