@@ -1,7 +1,7 @@
 name: grafana-alloy
 namespace: helm-user
 
-replica: 1
+replica: 2
 
 image:
   repository: grafana/alloy
