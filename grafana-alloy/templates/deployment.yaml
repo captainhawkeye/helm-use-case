@@ -31,7 +31,7 @@ spec:
           valueFrom:
             secretKeyRef:
               key: {{ $key }}
-              name: {{ .Values.name }}
+              name: {{ $.Values.name }}
         {{- end }}
         resources:
           limits:
