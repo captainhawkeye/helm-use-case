@@ -67,6 +67,7 @@ jobs:
           export $key="$value"
           echo "  $key: \"${!key}\"" >> helm-secrets.yaml
         done < ./grafana-alloy/secrets/${K8S_ENV}.yaml
+        cat helm-secrets.yaml
 
     - name: Check Helm Template
       run: |
