@@ -82,3 +82,7 @@ jobs:
         else
           helm template ./grafana-alloy -f ./grafana-alloy/values/${K8S_ENV}.yaml
         fi
+
+    - name: Helm Lint
+      run: |
+        helm lint ./grafana-alloy
