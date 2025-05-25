@@ -85,4 +85,4 @@ jobs:
 
     - name: Helm Lint
       run: |
-        helm lint ./grafana-alloy
+        helm lint ./grafana-alloy -f ./grafana-alloy/values/${K8S_ENV}.yaml
