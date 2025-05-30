@@ -40,4 +40,4 @@ hpa:
   targetMemoryUtilizationPercentage: 80
 
 gsmSecrets:
-  enabled: false
+  enabled: true
